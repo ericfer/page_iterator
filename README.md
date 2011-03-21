@@ -1,7 +1,7 @@
 # PageIterator
 
 The idea is splitting a large number of data in small parts (pagination concept) and iterating through them, so the execution of your script, batch file, rake task and so on, can be better managed regarding CPU and memory.
-The differential of **PageIterator** is that it keeps track of each iterated page in log. If the iteration was interrupted for any reason, the next execution of that iteration is going to start from the page it was previously interrupted.
+The differential of **PageIterator** is that it keeps track of each iterated page in a log file. If the iteration was interrupted for any reason, the next execution of that iteration is going to start from the page it was previously interrupted.
 
 ## Installation
 
@@ -16,8 +16,8 @@ The differential of **PageIterator** is that it keeps track of each iterated pag
 
 ### PageIterator Resources
 * `page_iterator.each_remaining_page! { |page| }` - iterates through each page passing the current page number as parameter to the block
-* `page_iterator.next!` - increments one page and logs it in the filesystem. **PageIterator** execute it after each iteration
-* `page_iterator.previous!` - decrement one page and logs it in the filesystem.
+* `page_iterator.next!` - increments one page and logs it to filesystem. **PageIterator** execute it after each iteration
+* `page_iterator.previous!` - decrement one page and logs it to filesystem.
 * `page_iterator.total_pages` - total number of pages
 * `page_iterator.remaining_items` - number of remaining items to be iterated through pages
 * `page_iterator.remaining_pages` - range of remaining pages to be iterated
@@ -28,7 +28,7 @@ The differential of **PageIterator** is that it keeps track of each iterated pag
 There is plenty room for improvements, but so far **PageIterator** just splits the total number of items to be processed, gets page numbers and other valued numbers calculated from the initial data, but it doesn't iterate through the items themselves. It's still needed a pagination mechanism for the items themselves.
 
 
-### Usage Example
+### Real Life Usage Example
 The example below shows **PageIterator** in action.
 Consider the following MongoMapper document. It could be any other Mapping layer that provides pagination feature.
 
@@ -72,4 +72,3 @@ It's possible to see that it's still needed a pagination mechanism for the items
 
 ## Author
 * [Eric Fer](https://github.com/ericfer)
- 
