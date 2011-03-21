@@ -48,7 +48,7 @@ If you want to iterate through all records from the database in a script, you ca
 
      STDOUT.write "\n - #{Person.to_s} (#{page_iterator.remaining_items}/#{page_iterator.total_items})"
      page_iterator.each_remaining_page! do |page|
-       person_list = Person.paginate(:per_page => PageIterator::DEFAULT_ITENS_PER_PAGE , :page => page)
+       person_list = Person.paginate(:per_page => page_iterator.per_page , :page => page)
        person_list.each do |person| 
          person.status = 'active'
          if person.save
