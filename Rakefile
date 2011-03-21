@@ -18,7 +18,7 @@ rescue LoadError
   end
 end
 
-gem_name = Dir["*.gemspec"].first.match(/\A(\w*).gemspec\z/).captures.first
+gem_name = File.basename(Dir["*.gemspec"].first, ".gemspec")
 
 desc "Build the gem, removing old ones"
 task :build do
