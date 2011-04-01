@@ -1,13 +1,17 @@
 class PageIterator
   DEFAULT_ITENS_PER_PAGE = 50
 
-  attr_reader :total_itens, :per_page
+  attr_reader :total_itens
 
   def initialize(total_itens, logfile, itens_per_page=DEFAULT_ITENS_PER_PAGE)
     @total_itens = total_itens
     @itens_per_page = itens_per_page
     @logfile = logfile
     @current_page = current_page_from_file
+  end
+
+  def per_page
+    @itens_per_page
   end
 
   def total_pages
