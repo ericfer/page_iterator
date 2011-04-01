@@ -25,12 +25,12 @@ The differential of **PageIterator** is that it keeps track of each iterated pag
 
 
 ### Limitations
-There is plenty room for improvements, but so far **PageIterator** just splits the total number of items to be processed, gets page numbers and other valued numbers calculated from the initial data, but it doesn't iterate through the items themselves. It's still needed a pagination mechanism for the items themselves.
+There is plenty room for improvements, but so far **PageIterator** just splits the total number of items to be processed, gets page numbers and other valued numbers calculated from the initial data, but it doesn't iterate through the items themselves. It's still needed a pagination mechanism for the items.
 
 
 ### Real Life Usage Example
 The example below shows **PageIterator** in action.
-Consider the following MongoMapper document. It could be any other Mapping layer that provides pagination feature.
+Consider the following MongoMapper document.
 
     class Person
       include MongoMapper::Document
@@ -39,7 +39,9 @@ Consider the following MongoMapper document. It could be any other Mapping layer
       timestamps!
     end
 
-If you want to iterate through all records from the database in a script, you can do the following
+It could be any other Mapping layer that provides pagination feature.
+
+If you want to iterate through all records from the database an amount each time, you can do the following
 
      STDOUT.sync = true
      STDOUT.write "Running..."
@@ -60,7 +62,7 @@ If you want to iterate through all records from the database in a script, you ca
        end  
      end
 
-The script is setting the status of a Person instance to *active*. If something goes wrong, the script will print *F* in the screen and exit. So, after fixing the reason of failure (*F*) and running the script again, **PageIterator** is going to start the execution from the page where the failure happened, and not since the beginning of the collection.
+The script is setting the status of a Person instance to *active*. If something goes wrong, the script will print *F* in the screen and exit. So, after you fix the reason of failure (*F*) and run the script again, **PageIterator** is going to start the execution from the page where the failure happened, and not since the beginning of the collection.
 It's possible to see that it's still needed a pagination mechanism for the items themselves, as `paginate` method that MongoMapper provides.
 
 
