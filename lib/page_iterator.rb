@@ -1,26 +1,26 @@
 class PageIterator
-  DEFAULT_ITENS_PER_PAGE = 50
+  DEFAULT_ITEMS_PER_PAGE = 50
 
-  attr_reader :total_itens
+  attr_reader :total_items
 
-  def initialize(total_itens, logfile, itens_per_page=DEFAULT_ITENS_PER_PAGE)
-    @total_itens = total_itens
-    @itens_per_page = itens_per_page
+  def initialize(total_items, logfile, items_per_page=DEFAULT_ITEMS_PER_PAGE)
+    @total_items = total_items
+    @items_per_page = items_per_page
     @logfile = logfile
     @current_page = current_page_from_file
   end
 
   def per_page
-    @itens_per_page
+    @items_per_page
   end
 
   def total_pages
-    pages = @total_itens / @itens_per_page
+    pages = @total_items / @items_per_page
     if pages == 0
       1
     else
-      last_page_itens = @total_itens % @itens_per_page
-      last_page_itens > 0 ? pages + 1 : pages
+      last_page_items = @total_items % @items_per_page
+      last_page_items > 0 ? pages + 1 : pages
     end
   end
 
@@ -34,11 +34,11 @@ class PageIterator
     log @current_page
   end
 
-  def remaining_itens
+  def remaining_items
     if @current_page > total_pages
       0
     else
-      @total_itens - (@current_page - 1) * @itens_per_page
+      @total_items - (@current_page - 1) * @items_per_page
     end
   end
 

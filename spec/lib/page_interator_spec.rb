@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe PageIterator, "when instantiated" do
   before do
-    @total_itens = 7
-    @itens_per_page = 2
+    @total_items = 7
+    @items_per_page = 2
     @logfile = "current_page"
-    @page_iterator = PageIterator.new(@total_itens, @logfile, @itens_per_page)
+    @page_iterator = PageIterator.new(@total_items, @logfile, @items_per_page)
   end
   
   it "should calculate the total number of pages" do
@@ -17,21 +17,21 @@ describe PageIterator, "when instantiated" do
   it "should 'previous!'"
   
   it "should 'remaining_pages'"
-
-  context "without specifying itens per page" do
+  
+  context "without specifying items per page" do
     before do
-      @page_iterator = PageIterator.new(@total_itens, @logfile)
+      @page_iterator = PageIterator.new(@total_items, @logfile)
     end
-    it "should use default itens per page" do
-      @page_iterator.instance_variable_get(:@itens_per_page) == PageIterator::DEFAULT_ITENS_PER_PAGE
+    it "should use default items per page" do
+      @page_iterator.per_page.should == PageIterator::DEFAULT_ITEMS_PER_PAGE
     end
   end
   
   context "when iterating through pages" do
-    context "manually" do
+    context "manually (using next!)" do
       context "since the first page" do
-        it "should return all itens" do
-          @page_iterator.remaining_itens == @total_itens
+        it "should return all items" do
+          @page_iterator.remaining_items.should == @total_items
         end
       end
 
@@ -40,8 +40,8 @@ describe PageIterator, "when instantiated" do
           2.times { @page_iterator.next! }
         end
 
-        it "should return remaining itens" do
-          @page_iterator.remaining_itens == 3
+        it "should return remaining items" do
+          @page_iterator.remaining_items.should == 3
         end
       end
 
@@ -50,13 +50,13 @@ describe PageIterator, "when instantiated" do
           @page_iterator.total_pages.times { @page_iterator.next! }
         end
 
-        it "should return zero itens" do
-          @page_iterator.remaining_itens == 0
+        it "should return zero items" do
+          @page_iterator.remaining_items.should == 0
         end
       end
     end
 
-    context "automaticaly" do
+    context "automaticaly (using each_remaining_page!)" do
       context "using per_page from the inside of the iteration" do
         before do
           @per_pages = []
@@ -65,19 +65,28 @@ describe PageIterator, "when instantiated" do
             @per_pages << @page_iterator.per_page
           end
         end
-        
+
         it "should be accessible" do
-          @per_pages.should == @expected_per_pages  
+          @per_pages.should == @expected_per_pages
+        end
+      end
+
+      shared_examples_for "iterations completed" do
+        it "should not iterate anymore" do
+          @pages = []
+          @expected_pages = @page_iterator.remaining_pages.map
+          @page_iterator.each_remaining_page! do |page|
+            @pages << page
+          end
+          @pages.should == @expected_pages
         end
       end
       
       context "since the first page" do
-        it "should not iterate anymore" do
-          validate_iteration
-        end
-        
-        it "should return all itens" do
-          @page_iterator.remaining_itens == @total_itens
+        it_should_behave_like "iterations completed"
+
+        it "should return all items" do
+          @page_iterator.remaining_items.should == @total_items
         end        
       end
 
@@ -86,12 +95,10 @@ describe PageIterator, "when instantiated" do
           2.times { @page_iterator.next! }
         end
 
-        it "should not iterate anymore" do
-          validate_iteration
-        end
+        it_should_behave_like "iterations completed"
         
-        it "should return remaining itens" do
-          @page_iterator.remaining_itens == 3
+        it "should return remaining items" do
+          @page_iterator.remaining_items.should == 3
         end        
       end
 
@@ -100,12 +107,10 @@ describe PageIterator, "when instantiated" do
           @page_iterator.total_pages.times { @page_iterator.next! }
         end
 
-        it "should not iterate anymore" do
-          validate_iteration
-        end
+        it_should_behave_like "iterations completed"
         
-        it "should return zero itens" do
-          @page_iterator.remaining_itens == 0
+        it "should return zero items" do
+          @page_iterator.remaining_items.should == 0
         end        
       end
     end
@@ -114,13 +119,4 @@ describe PageIterator, "when instantiated" do
   after do
     File.exist?(@logfile) && File.delete(@logfile)
   end
-end
-
-def validate_iteration
-  @pages = []
-  @expected_pages = @page_iterator.remaining_pages.map
-  @page_iterator.each_remaining_page! do |page|
-    @pages << page
-  end
-  @pages.should == @expected_pages
 end

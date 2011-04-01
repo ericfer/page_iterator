@@ -8,7 +8,7 @@ The differential of **PageIterator** is that it keeps track of each iterated pag
     gem install page_iterator
 
 ### Usage
-    page_iterator = PageIterator.new(<NUMBER_OF_TOTAL_ITENS>, <FILENAME_TO_LOG>)
+    page_iterator = PageIterator.new(<NUMBER_OF_TOTAL_ITEMS>, <FILENAME_TO_LOG>)
 
     page_iterator.each_remaining_page! do |page|
         # do something here
